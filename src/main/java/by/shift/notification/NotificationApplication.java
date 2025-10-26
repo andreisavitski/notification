@@ -2,13 +2,12 @@ package by.shift.notification;
 
 import by.shift.notification.enums.NotificationType;
 import by.shift.notification.factory.AbstractSenderFactory;
-import by.shift.notification.factory.FactoryProvider;
-import by.shift.notification.resolver.NotificationSenderResolver;
 import by.shift.notification.sender.NotificationSender;
+import by.shift.notification.resolver.SenderResolver;
+import by.shift.notification.utils.Utility;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
 
 import static by.shift.notification.enums.NotificationType.*;
 
@@ -16,30 +15,17 @@ public class NotificationApplication {
 
     public static void main(String[] args) {
 
-        NotificationType notificationType = getRandomNotificationType();
-        System.out.println("notificationType: " + notificationType);
+        Utility utility = new Utility();
+
+        NotificationType type = utility.getRandomNotificationType();
+        System.out.println("notificationType: " + type);
 
         EnumSet<NotificationType> notificationTypes = EnumSet.of(SMS, EMAIL);
 
-        FactoryProvider factoryProvider = new FactoryProvider();
-        AbstractSenderFactory senderFactory = factoryProvider.getSenderFactory(notificationTypes);
+        AbstractSenderFactory factory = new SenderResolver(notificationTypes).getSenderFactory();
 
-        NotificationSenderResolver notificationSenderResolver = new NotificationSenderResolver(senderFactory);
-        List<NotificationSender> notificationSenderList = notificationSenderResolver.getNotificationSenders();
+        List<NotificationSender> notificationSenderList = factory.getNotificationSenders();
 
-        notificationSenderList.stream()
-                .filter(l -> notificationType.equals(l.get()))
-                .findFirst()
-                .ifPresentOrElse(
-                        NotificationSender::send,
-                        () -> System.out.println("This type of notification " + notificationType + " is prohibited")
-                );
+        utility.sendNotification(notificationSenderList, type);
     }
-
-    private static NotificationType getRandomNotificationType() {
-        Random random = new Random();
-        NotificationType[] types = NotificationType.values();
-        return types[random.nextInt(types.length)];
-    }
-
 }
