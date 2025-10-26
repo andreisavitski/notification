@@ -8,15 +8,18 @@ import by.shift.notification.sender.NotificationSender;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 
-import static by.shift.notification.enums.NotificationType.EMAIL;
-import static by.shift.notification.enums.NotificationType.SMS;
-import static by.shift.notification.enums.NotificationType.TELEGRAM;
+import static by.shift.notification.enums.NotificationType.*;
 
 public class NotificationApplication {
 
     public static void main(String[] args) {
-        EnumSet<NotificationType> notificationTypes = EnumSet.of(SMS, TELEGRAM, EMAIL);
+
+        NotificationType notificationType = getRandomNotificationType();
+        System.out.println("notificationType: " + notificationType);
+
+        EnumSet<NotificationType> notificationTypes = EnumSet.of(SMS, EMAIL);
 
         FactoryProvider factoryProvider = new FactoryProvider();
         AbstractSenderFactory senderFactory = factoryProvider.getSenderFactory(notificationTypes);
@@ -24,7 +27,19 @@ public class NotificationApplication {
         NotificationSenderResolver notificationSenderResolver = new NotificationSenderResolver(senderFactory);
         List<NotificationSender> notificationSenderList = notificationSenderResolver.getNotificationSenders();
 
-        notificationSenderList.forEach(NotificationSender::send);
+        notificationSenderList.stream()
+                .filter(l -> notificationType.equals(l.get()))
+                .findFirst()
+                .ifPresentOrElse(
+                        NotificationSender::send,
+                        () -> System.out.println("This type of notification " + notificationType + " is prohibited")
+                );
+    }
+
+    private static NotificationType getRandomNotificationType() {
+        Random random = new Random();
+        NotificationType[] types = NotificationType.values();
+        return types[random.nextInt(types.length)];
     }
 
 }
