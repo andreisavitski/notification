@@ -13,7 +13,7 @@ public class EmailSender implements NotificationSender {
     }
 
     @Override
-    public NotificationType get() {
+    public NotificationType getNotificationType() {
         return notificationType;
     }
 }

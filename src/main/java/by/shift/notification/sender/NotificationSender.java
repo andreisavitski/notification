@@ -6,5 +6,5 @@ public interface NotificationSender {
 
     void send();
 
-    NotificationType get();
+    NotificationType getNotificationType();
 }

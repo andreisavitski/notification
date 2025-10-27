@@ -13,7 +13,7 @@ public class SmsSender implements NotificationSender {
     }
 
     @Override
-    public NotificationType get() {
+    public NotificationType getNotificationType() {
         return notificationType;
     }
 }
