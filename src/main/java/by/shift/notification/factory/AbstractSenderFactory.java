@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface AbstractSenderFactory {
 
-    List<NotificationSender> getNotificationSenders();
+    List<NotificationSender> createNotificationSenders();
 
 }

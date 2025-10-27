@@ -2,30 +2,29 @@ package by.shift.notification;
 
 import by.shift.notification.enums.NotificationType;
 import by.shift.notification.factory.AbstractSenderFactory;
+import by.shift.notification.factory.FactoryProvider;
+import by.shift.notification.resolver.NotificationSenderResolver;
 import by.shift.notification.sender.NotificationSender;
-import by.shift.notification.resolver.SenderResolver;
-import by.shift.notification.utils.Utility;
 
 import java.util.EnumSet;
 import java.util.List;
 
-import static by.shift.notification.enums.NotificationType.*;
+import static by.shift.notification.enums.NotificationType.EMAIL;
+import static by.shift.notification.enums.NotificationType.SMS;
+import static by.shift.notification.enums.NotificationType.TELEGRAM;
 
 public class NotificationApplication {
 
     public static void main(String[] args) {
+        EnumSet<NotificationType> notificationTypes = EnumSet.of(SMS, TELEGRAM, EMAIL);
 
-        Utility utility = new Utility();
+        FactoryProvider factoryProvider = new FactoryProvider();
+        AbstractSenderFactory senderFactory = factoryProvider.getSenderFactory(notificationTypes);
 
-        NotificationType type = utility.getRandomNotificationType();
-        System.out.println("notificationType: " + type);
+        NotificationSenderResolver notificationSenderResolver = new NotificationSenderResolver(senderFactory);
+        List<NotificationSender> notificationSenderList = notificationSenderResolver.getNotificationSenders();
 
-        EnumSet<NotificationType> notificationTypes = EnumSet.of(SMS, EMAIL);
-
-        AbstractSenderFactory factory = new SenderResolver(notificationTypes).getSenderFactory();
-
-        List<NotificationSender> notificationSenderList = factory.getNotificationSenders();
-
-        utility.sendNotification(notificationSenderList, type);
+        notificationSenderList.forEach(NotificationSender::send);
     }
+
 }
