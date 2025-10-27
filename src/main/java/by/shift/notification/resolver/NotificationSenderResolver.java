@@ -3,6 +3,8 @@ package by.shift.notification.resolver;
 import by.shift.notification.factory.AbstractSenderFactory;
 import by.shift.notification.sender.NotificationSender;
 
+import java.util.List;
+
 public class NotificationSenderResolver {
 
     private final AbstractSenderFactory abstractSenderFactory;
@@ -11,7 +13,7 @@ public class NotificationSenderResolver {
         this.abstractSenderFactory = abstractSenderFactory;
     }
 
-    public NotificationSender getNotificationSender() {
-        return abstractSenderFactory.createNotificationSender();
+    public List<NotificationSender> getNotificationSenders() {
+        return abstractSenderFactory.createNotificationSenders();
     }
 }
