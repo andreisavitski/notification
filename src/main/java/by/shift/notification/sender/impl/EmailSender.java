@@ -6,6 +6,6 @@ public class EmailSender implements NotificationSender {
 
     @Override
     public void send() {
-        System.out.println("Sending EMAIL");
+        System.out.println("Sending Email");
     }
 }

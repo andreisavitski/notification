@@ -6,6 +6,6 @@ public class TelegramSender implements NotificationSender {
 
     @Override
     public void send() {
-        System.out.println("Sending Telegram");
+        System.out.println("Sending Telegram message");
     }
 }
