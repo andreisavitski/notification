@@ -5,9 +5,9 @@ import by.shift.notification.factory.AbstractSenderFactory;
 import by.shift.notification.factory.impl.ConcreteSenderFactory;
 import by.shift.notification.sender.NotificationSender;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SenderResolver {
@@ -21,13 +21,14 @@ public class SenderResolver {
     }
 
     public AbstractSenderFactory getSenderFactory() {
-        List<NotificationSender> factoryList = new ArrayList<>();
+        Map<NotificationType, NotificationSender> factoryMap = new HashMap<>();
+        Map<NotificationType, NotificationSender> senderStorageMap = senderStorage.getNotificationSenders();
 
         notificationType.forEach(n -> {
-            if (senderStorage.getNotificationSenders().containsKey(n)) {
-                factoryList.add(senderStorage.getNotificationSenders().get(n));
+            if (senderStorageMap.containsKey(n)) {
+                factoryMap.put(n, senderStorageMap.get(n));
             }
         });
-        return new ConcreteSenderFactory(factoryList);
+        return new ConcreteSenderFactory(factoryMap);
     }
 }

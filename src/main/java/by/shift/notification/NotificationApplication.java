@@ -2,15 +2,16 @@ package by.shift.notification;
 
 import by.shift.notification.enums.NotificationType;
 import by.shift.notification.factory.AbstractSenderFactory;
+import by.shift.notification.resolver.SenderResolver;
 import by.shift.notification.resolver.SenderService;
 import by.shift.notification.sender.NotificationSender;
-import by.shift.notification.resolver.SenderResolver;
 import by.shift.notification.utils.Utility;
 
 import java.util.EnumSet;
-import java.util.List;
+import java.util.Map;
 
-import static by.shift.notification.enums.NotificationType.*;
+import static by.shift.notification.enums.NotificationType.EMAIL;
+import static by.shift.notification.enums.NotificationType.SMS;
 
 public class NotificationApplication {
 
@@ -27,8 +28,8 @@ public class NotificationApplication {
 
         AbstractSenderFactory factory = new SenderResolver(notificationTypes).getSenderFactory();
 
-        List<NotificationSender> notificationSenderList = factory.getNotificationSenders();
+        Map<NotificationType, NotificationSender> notificationSenderMap = factory.getNotificationSenders();
 
-        service.sendNotification(notificationSenderList, type);
+        service.sendNotification(notificationSenderMap, type);
     }
 }
