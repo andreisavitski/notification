@@ -4,9 +4,9 @@ import by.shift.notification.enums.NotificationType;
 
 import java.util.Random;
 
-public final class Utility {
+public final class RandomUtil {
 
-    private Utility() {
+    private RandomUtil() {
     }
 
     public static NotificationType getRandomNotificationType() {

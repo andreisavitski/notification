@@ -8,9 +8,11 @@ import by.shift.notification.sender.impl.TelegramSender;
 
 import java.util.Map;
 
-import static by.shift.notification.enums.NotificationType.*;
+import static by.shift.notification.enums.NotificationType.EMAIL;
+import static by.shift.notification.enums.NotificationType.SMS;
+import static by.shift.notification.enums.NotificationType.TELEGRAM;
 
-public class SenderStorage {
+public class DefaultStorage implements NotificationSenderFactory {
 
     private final Map<NotificationType, NotificationSender> notificationSenders = Map.of(
             EMAIL, new EmailSender(),
@@ -18,6 +20,7 @@ public class SenderStorage {
             SMS, new SmsSender()
     );
 
+    @Override
     public Map<NotificationType, NotificationSender> getNotificationSenders() {
         return notificationSenders;
     }
